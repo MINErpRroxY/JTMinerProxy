@@ -1,4 +1,4 @@
-# MinerProxy - 以修改作者抽水至千分之三。
+# MinerProxy - 作者抽水只有千分之三。
 最稳定的ETH以太坊代理中转矿池程序，MinerProxy/矿池代理，支持TCP和SSL协议，支持自定义抽水，高性能高并发，支持web界面管理，包含自启动和进程守护，重启后可以自动运行，会放开防火墙和连接数限制，一键搞定。
 
 # MinerProxy - 使用后算力截图，算力几乎无损耗。
@@ -10,7 +10,7 @@
 # 矿工交流 QQ群： 308929177
 
 
-# Liunx-手动安装
+# Liunx-手动安装（过程要等待）
 ```bash
 常用命令
 root权限开启
@@ -38,7 +38,7 @@ tail -f nohup.out (后台运行时查看)
 ```
 
 运行成功后访问 IP:18888 (如：127.0.0.1:18888 注意开放端口) 也可以使用关闭防火墙命令进行配置即可。
-### 后台运行（注意后面的&）运行完再敲几下回车
+### 后台运行（注意后面的&）运行完再敲几下回车（不成功的时候看）
 ```bash
 nohup ./minerProxy_3.0.3_linux &
 ```
@@ -111,7 +111,7 @@ webserver: true 开启web面板填：true 关闭填：false
       clientnum: 0 默认即可
 ```
 
-# 参数说明
+# 重点需要观看的参数说明
 ```bigquery
 抽水比例   这里是百分比，填入数字1就是1%
 抽水矿池  （抽水去的矿池，比方说可以把鱼池的抽去E池，）
@@ -119,4 +119,25 @@ webserver: true 开启web面板填：true 关闭填：false
 钱包地址  顾名思义，抽水的钱包地址
 代理矿池  （你转发的矿池挖矿地址，官方的）
 本地端口  矿工连接你服务器的端口，比方说222.222.222.222:5678，这里就写5678
+注意网页配置
+矿池代理比如代理不加密的tcp的请输入 tcp://eth.f2pool.com:6688 如果你要代理加密的SSL ssl://asia2.ethermine.org:5555 记得在安全组打开你端口.否则矿机连不上。
+抽水矿池，你要抽到哪里填哪里.ssl加密.需要就开启.不需要就关闭。
+```
+
+# 重点需要观看的参数说明：挖矿软件的设置
+```bigquery
+GMiner连接
+TCP端口方式： miner --algo ethash --server {host}:3333 --user {wallet}.{worker} 
+SSL加密连接方式： miner --algo ethash --server {host}:14333 --user {wallet}.{worker} --ssl
+NBMiner连接
+TCP端口方式： nbminer -a ethash -o stratum+tcp://{host}:3333 -u wallet.worker -log 
+SSL加密连接方式： nbminer -a ethash -o stratum+ssl://{host}:14333 -u wallet.worker -log
+T-REX连接
+TCP端口方式： t-rex.exe -a ethash -o stratum+tcp://{host}:3333 -u {wallet} -p x -w {worker} 
+SSL加密连接方式： t-rex.exe -a ethash -o stratum+ssl://{host}:14333 -u {wallet} -p x -w {worker} --no-strict-ssl
+各种挖矿软件，OS系统
+挖矿软件请在矿池管理添加一个矿池，矿池地址如下： 如TCP方式： {host}:3333       SSL方式: {host}:14333
+如需要SSL加密方式：开源矿工建议使用GMiner2.74，在高级参数上添加--ssl
+OS系统，如使用E池，请选择上面的SSL urls，在下面重新配置个你的IP：地址。
+如还有不懂的，在群里有专门的的解答。
 ```
