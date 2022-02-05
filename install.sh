@@ -123,7 +123,7 @@ start_write_config() {
         echo
         echo "----------------------------------------------------------------"
         echo
-        echo " Supervisor安装目录没了，安装失败"
+        echo " OK"
         echo
         exit 1
     fi
