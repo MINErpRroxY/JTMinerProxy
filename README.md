@@ -31,10 +31,18 @@ sudo ufw disable
 
 进入服务器root权限后可复制以下代码，一一输入。输入完一个回车一次，接着输入第二个命令。
 git clone https://github.com/MINErpRroxY/MinerProxy.git
-cd MinerProxy
 chmod a+x minerProxy_3.0.3_linux
+cd MinerProxy
 nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
-tail -f nohup.out (后台运行时查看)
+cat  config.yml   （这个命令可以查看token）
+tail -f nohup.out  (后台运行时查看)
+
+wget安装命令             yum安装命令               nohup安装命令
+apt install wget        apt install  yum          apt install nohup
+
+请尽量不要使用国内的腾讯云，阿里云等云服务器，可以选择香港本地公司的华纳云，现在年终每天有准点抢328元的一年期限的香港云服务器CNN回国路线
+还有megalayer云服务器，现在年终也有活动，点开公告信息：2022年 VPS 全新升级 5折继续 （199元一年香港云服务器）
+
 ```
 
 运行成功后访问 IP:18888 (如：127.0.0.1:18888 注意开放端口) 也可以使用关闭防火墙命令进行配置即可。
