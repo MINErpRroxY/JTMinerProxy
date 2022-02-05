@@ -34,7 +34,6 @@ git clone https://github.com/MINErpRroxY/MinerProxy.git
 chmod a+x minerProxy_3.0.3_linux
 cd MinerProxy
 nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
-cat  config.yml   （这个命令可以查看token）
 tail -f nohup.out  (后台运行时查看)
 
 wget安装命令             yum安装命令               nohup安装命令
