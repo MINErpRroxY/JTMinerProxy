@@ -14,10 +14,13 @@
 功能：包含自启动和进程守护，重启后可以自动运行，会放开防火墙和连接数限制，一键搞定<br />
 要求：Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统<br />
 使用 root 用户输入下面命令安装或卸载<br />
+
+### 输入命令
 ```bash
-bash <(curl -s -L https://git.io/Jy13U)
+wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
+bash install.sh
 ```
-### 输入命令回车之后一直卡住不动，换这种办法
+### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
 ubuntu/debian 系统安装
 ```bash
 wget: apt-get update -y && apt-get install wget -y
@@ -25,11 +28,6 @@ wget: apt-get update -y && apt-get install wget -y
 centos 系统安装
 ```bash
 yum update -y && yum install wget -y
-```
-安装好 wget 之后 下载脚本并执行
-```bash
-wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
-bash install.sh
 ```
 
 ### 提示 curl: command not found的先安装curl
