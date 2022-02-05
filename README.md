@@ -19,6 +19,10 @@
 ```bash
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
+cd MinerProxy
+chmod a+x minerProxy_3.0.3_linux
+nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
+tail -f nohup.out  (后台运行时查看)
 ```
 ### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
 ubuntu/debian 系统安装
