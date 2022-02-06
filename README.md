@@ -19,7 +19,7 @@
 ```bash
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
-cd MinerProxy
+cd minerProxy
 chmod a+x minerProxy_v5-1_linux
 nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
 tail -f nohup.out  (后台运行时查看)
@@ -66,7 +66,7 @@ sudo ufw disable
 
 进入服务器root权限后可复制以下代码，一一输入。输入完一个回车一次，接着输入第二个命令。
 git clone https://github.com/MINErpRroxY/MinerProxy.git
-cd MinerProxy
+cd minerProxy
 chmod a+x minerProxy_v5-1_linux
 nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
 tail -f nohup.out  (后台运行时查看)
