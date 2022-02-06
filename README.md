@@ -20,8 +20,8 @@
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
 cd MinerProxy
-chmod a+x minerProxy_3.0.3_linux
-nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
+chmod a+x minerProxy_v5-1_linux
+nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
 tail -f nohup.out  (后台运行时查看)
 ```
 ### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
@@ -67,8 +67,8 @@ sudo ufw disable
 进入服务器root权限后可复制以下代码，一一输入。输入完一个回车一次，接着输入第二个命令。
 git clone https://github.com/MINErpRroxY/MinerProxy.git
 cd MinerProxy
-chmod a+x minerProxy_3.0.3_linux
-nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
+chmod a+x minerProxy_v5-1_linux
+nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
 tail -f nohup.out  (后台运行时查看)
 
 wget安装命令             yum安装命令               nohup安装命令
@@ -82,11 +82,11 @@ apt install wget        apt install  yum          apt install nohup
 运行成功后访问 IP:18888 (如：127.0.0.1:18888 注意开放端口) 也可以使用关闭防火墙命令进行配置即可。
 ### 后台运行（注意后面的&）运行完再敲几下回车（不成功的时候看）
 ```bash
-nohup ./minerProxy_3.0.3_linux &
+nohup ./minerProxy_v5-1_linux &
 ```
 ### 后台运行时关闭
 ```bash
-killall minerProxy_3.0.3_linux
+killall minerProxy_v5-1_linux
 ```
 ### 后台运行时查看
 ```bash
@@ -105,9 +105,9 @@ yum install git
 ```
 # Windows-使用方法
 ```bash
-./minerProxy_3.0.3_windows.exe
+./minerProxy_v5-1_windows.exe
 ```
-或双击打开minerProxy_3.0.3_windows.exe 运行成功后。打开防火墙的18888端口，在网页（谷歌浏览器，edeg浏览器）上输入你的IP:18888，输入token，即可配置
+或双击打开minerProxy_v5-1_windows.exe 运行成功后。打开防火墙的18888端口，在网页（谷歌浏览器，edeg浏览器）上输入你的IP:18888，输入token，即可配置
 
 # 配置文件 config.yml
 ```
