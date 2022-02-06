@@ -19,10 +19,6 @@
 ```bash
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
-cd minerProxy
-chmod a+x minerProxy_v5-1_linux
-nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
-tail -f nohup.out  (后台运行时查看)
 ```
 ### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
 ubuntu/debian 系统安装
@@ -65,11 +61,13 @@ ufw status
 sudo ufw disable
 
 进入服务器root权限后可复制以下代码，一一输入。输入完一个回车一次，接着输入第二个命令。
-git clone https://github.com/MINErpRroxY/MinerProxy.git
+mkdir minerProxy
 cd minerProxy
+wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/minerProxy_v5-1_linux -O /root/minerProxy/minerProxy_v5-1_linux
 chmod a+x minerProxy_v5-1_linux
 nohup ./minerProxy_v5-1_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
-tail -f nohup.out  (后台运行时查看)
+cat /root/minerProxy/config.yml
+tail -f nohup.out  (后台运行时查看，需要时才输入，输入上面的cat命令获取token已足够)
 
 wget安装命令             yum安装命令               nohup安装命令
 apt install wget        apt install  yum          apt install nohup
