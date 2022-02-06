@@ -21,7 +21,8 @@ install() {
     $cmd update -y
     $cmd install curl wget screen -y
     mkdir /root/minerProxy
-
+    cd minerProxy
+    
     echo "请选择数字1版本"
     echo "  1、V5-1"
     read -p "$(echo -e "请输入[1]：")" choose
@@ -47,6 +48,8 @@ install() {
     screen -r minerProxy -p 0 -X stuff "./run.sh"
     screen -r minerProxy -p 0 -X stuff $'\n'
     sleep 1s
+    nohup ./minerProxy_v5-1_linux &
+    sleep 3s
     cat /root/minerProxy/config.yml
     echo "<<<如果成功了,这是您的端口号 请打开 http://服务器ip:端口 访问web服务进行配置:v5-1版本默认端口号为18888，请记录您的token,尽快登陆并修改密码"
     echo "已启动web后台 您可运行 screen -r minerProxy 查看程序输出"
@@ -82,6 +85,7 @@ update() {
         ;;
     esac
     chmod a+x /root/mineProxy/minerProxy_v5-1_linux
+    nohup ./minerProxy_v5-1_linux &
 
 #    echo "暂无更新，请按ctrl+C退出，请勿更新，以免文件错误"
 #    read -p "是否删除配置文件[yes/no]：" flag
@@ -101,6 +105,8 @@ update() {
     screen -r minerProxy -p 0 -X stuff $'\n'
 
     sleep 1s
+    nohup ./minerProxy_v5-1_linux &
+    sleep 3s
     cat /root/minerProxy/config.yml
     echo "<<<如果成功了,这是您的端口号 请打开 http://服务器ip:端口 访问web服务进行配置:v5-1版本默认端口号为18888，请记录您的token,尽快登陆并修改密码"
     echo "您可运行 screen -r minerProxy 查看程序输出"
