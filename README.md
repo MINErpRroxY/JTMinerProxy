@@ -20,11 +20,6 @@
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
 ```
-### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
-ubuntu/debian 系统安装
-```bash
-wget: apt-get update -y && apt-get install wget -y
-```
 ### 查看运行情况
 ```bash
 screen -r minerProxy
@@ -32,6 +27,12 @@ screen -r minerProxy
 ### 退出查看运行情况 键盘键入
 ```
 ctrl + a + d
+```
+
+### 如输入命令后，无法安装，请根据系统版本输入以下命令安装wget
+ubuntu/debian 系统安装
+```bash
+wget: apt-get update -y && apt-get install wget -y
 ```
 
 centos 系统安装
