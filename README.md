@@ -25,6 +25,15 @@ ubuntu/debian 系统安装
 ```bash
 wget: apt-get update -y && apt-get install wget -y
 ```
+### 查看运行情况
+```bash
+screen -r minerProxy
+```
+### 退出查看运行情况 键盘键入
+```
+ctrl + a + d
+```
+
 centos 系统安装
 ```bash
 yum update -y && yum install wget -y
