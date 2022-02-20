@@ -14,12 +14,19 @@
 功能：包含自启动和进程守护，重启后可以自动运行，会放开防火墙和连接数限制，一键搞定<br />
 要求：Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统<br />
 使用 root 用户输入下面命令安装或卸载<br />
+请尽量不要使用国内的腾讯云，阿里云等云服务器。选择国外的CNN回国路线的服务器，请先查阅服务商公司所在地是否不属于国内。
 
 ### 输入命令
 ```bash
 wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
 ```
+### 香港本地公司服务商推荐，低延迟，安全，无需备案。
+注册抢购价366一年:链接:https://my.htstack.com/aff.php?aff=7162
+先点击右上角快速注册，然后再点击左上角的最新活动，选择第二个云服务器
+选择香港服务器366一年超划算。如果你的矿机算力足够大，可以选择第二个款配置。
+```
+
 ### 查看运行情况
 ```bash
 screen -r minerProxy
