@@ -22,18 +22,19 @@ wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh
 bash install.sh
 ```
 ### 香港本地公司服务商推荐，低延迟，安全，无需备案。
+```bash
 注册抢购价366一年:链接:https://my.htstack.com/aff.php?aff=7162
 先点击右上角快速注册，然后再点击左上角的最新活动，选择第二个云服务器
 选择香港服务器366一年超划算。如果你的矿机算力足够大，可以选择第二个款配置。
 ```
 
 ### 查看运行情况（如有被攻击，可以输入命令查看到对方攻击者IP地址）
-```
+```bash
 screen -r minerProxy
 ```
 
 ### 退出查看运行情况 键盘键入（然后退出在安全组中设置禁止该IP。）
-```
+```bash
 ctrl + a + d
 ```
 
