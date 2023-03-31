@@ -1,193 +1,453 @@
 #!/bin/bash
-[[ $(id -u) != 0 ]] && echo -e "请使用root权限运行安装脚本" && exit 1
+# Author: Justin
+# github: https://github.com/MINErpRroxY
 
-cmd="apt-get"
-if [[ $(command -v apt-get) || $(command -v yum) ]] && [[ $(command -v systemctl) ]]; then
-    if [[ $(command -v yum) ]]; then
-        cmd="yum"
-    fi
-else
-    echo "此脚本不支持该系统" && exit 1
-fi
+VERSION="1.0.0"
 
-install() {
-    if [ -d "/root/minerProxy" ]; then
-        echo -e "您已安装了该软件,如果确定没有安装,请输入rm -rf /root/minerProxy" && exit 1
-    fi
-    if screen -list | grep -q "minerProxy_v5-1_linux"; then
-        echo -e "检测到您已启动了minerProxy_v5-1_linux,请关闭后再安装" && exit 1
-    fi
+DOWNLOAD_HOST="https://github.com/MINErpRroxY/MinerProxy/tree/main/Linux-64"
 
-    $cmd update -y
-    $cmd install curl wget screen -y
-    mkdir /root/minerProxy
-    cd minerProxy
-    
-    echo "请选择数字1版本"
-    echo "  1、V5-1"
-    read -p "$(echo -e "请输入[1]：")" choose
-    case $choose in
-    1)
-        wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/minerProxy_v5-1_linux -O /root/minerProxy/minerProxy_v5-1_linux
-        ;;
-    *)
-        echo "请输入数字1"
-        ;;
-    esac
-    chmod a+x /root/minerProxy/minerProxy_v5-1_linux
-    nohup ./minerProxy_v5-1_linux &
+DOWNLOAD_STANDBY="https://github.com/MINErpRroxY/MinerProxy/tree/main/Linux-64"
 
-    wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/install.sh -O /root/minerProxy/install.sh
-    chmod a+x /root/minerProxy/install.sh
-    echo "如果没有报错则安装成功"
-    echo "正在启动..."
-    screen -dmS minerProxy
-    sleep 0.2s
-    screen -r minerProxy -p 0 -X stuff "cd /root/minerProxy"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-    screen -r minerProxy -p 0 -X stuff "./run.sh"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-    sleep 1s
-    nohup ./minerProxy_v5-1_linux &
-    sleep 3s
-    cat /root/minerProxy/config.yml
-    echo "<<<如果成功了,这是您的端口号 请打开 http://服务器ip:端口 访问web服务进行配置:v5-1版本默认端口号为18888，请记录您的token,尽快登陆并修改密码"
-    echo "已启动web后台 您可运行 screen -r minerProxy 查看程序输出"
+PATH_J="/root/JTproxy"
+
+PATH_EXEC="JTproxy"
+
+PATH_CACHE="/root/JTmproxy/.cache"
+
+PATH_LICENSE="/root/JTmproxy/license"
+
+PATH_CONFIG="/root/JTmproxy/.env"
+
+PATH_NOHUP="/root/JTmproxy/nohup.out"
+PATH_ERR="/root/JTmproxy/err.log"
+
+
+PATH_TURN_ON="/etc/profile.d"
+PATH_TURN_ON_SH="/etc/profile.d/ktm.sh"
+
+ISSUE() {
+    echo "1.0.0"
+
 }
 
-uninstall() {
-    read -p "是否确认删除minerProxy_v5-1_linux[yes/no]：" flag
-    if [ -z $flag ]; then
-        echo "输入错误" && exit 1
+colorEcho(){
+    COLOR=$1
+    echo -e "\033[${COLOR}${@:2}\033[0m"
+}
+
+filterResult() {
+    if [ $1 -eq 0 ]; then
+        echo ""
     else
-        if [ "$flag" = "yes" -o "$flag" = "ye" -o "$flag" = "y" ]; then
-            screen -X -S minerProxy quit
-            rm -rf /root/minerProxy
-            echo "卸载minerProxy成功"
+        colorEcho ${RED} "【${2}】失败。"
+	
+        if [ ! $3 ];then
+            colorEcho ${RED} "!!!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!!!"
+            exit 1
         fi
+    fi
+    echo -e
+}
+
+getConfig() {
+    value=$(sed -n 's/^[[:space:]]*'$1'[[:space:]]*=[[:space:]]*\(.*[^[:space:]]\)\([[:space:]]*\)$/\1/p' $PATH_CONFIG)
+    echo $value
+}
+
+setConfig() {
+    if [ ! -f "$PATH_CONFIG" ]; then
+        echo "未发现环境变量配置文件, 创建.env"
+        
+        touch $PATH_CONFIG
+
+        chmod -R 777 $PATH_CONFIG
+
+        echo "JT_START_PORT=16777" >> $PATH_CONFIG
+    fi
+
+    TARGET_VALUE="$1=$2"
+
+    line=$(sed -n '/'$1'/=' ${PATH_CONFIG})
+
+    sed -i "${line} a $TARGET_VALUE" $PATH_CONFIG
+
+    sed  -i  "$line d" $PATH_CONFIG
+
+    colorEcho ${GREEN} "$1已修改为$2"
+}
+
+#检查是否为Root
+[ $(id -u) != "0" ] && { colorEcho ${RED} "请使用root用户执行此脚本."; exit 1; }
+
+PACKAGE_MANAGER="apt-get"
+PACKAGE_PURGE="apt-get purge"
+
+#######color code########
+RED="31m"
+GREEN="32m"
+YELLOW="33m"
+BLUE="36m"
+FUCHSIA="35m"
+
+if [[ `command -v apt-get` ]];then
+    PACKAGE_MANAGER='apt-get'
+elif [[ `command -v dnf` ]];then
+    PACKAGE_MANAGER='dnf'
+elif [[ `command -v yum` ]];then
+    PACKAGE_MANAGER='yum'
+    PACKAGE_PURGE="yum remove"
+else
+    colorEcho $RED "不支持的操作系统."
+    exit 1
+fi
+
+checkProcess() {
+    COUNT=$(ps -ef |grep $1 |grep -v "grep" |wc -l)
+
+    if [ $COUNT -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+clearlog() {
+    echo "清理日志"
+    rm $PATH_NOHUP > /dev/null 2>&1
+    rm $PATH_ERR > /dev/null 2>&1
+    echo "清理完成"
+}
+
+stop() {
+    colorEcho $BLUE "终止JTMinerProxy进程"
+    killall JTproxy
+    sleep 1
+}
+
+uninstall() {    
+    stop
+
+    rm -rf ${PATH_JT}
+
+    turn_off
+
+    colorEcho $GREEN "卸载完成"
+}
+
+start() {
+    colorEcho $BLUE "启动程序..."
+    checkProcess "JTproxy"
+    if [ $? -eq 1 ]; then
+        colorEcho ${RED} "程序已经启动，请不要重复启动。"
+        return
+    else
+        # 要先cd进去 否则nohup日志会产生在当前路径
+        cd $PATH_JT
+        filterResult $? "打开目录"
+
+        clearlog
+
+        nohup "${PATH_JT}/${PATH_EXEC}" 2>err.log &
+        # nohup "${PATH_JT}/${PATH_EXEC}" >/dev/null 2>log &
+        filterResult $? "启动程序"
+
+        # getConfig "JT_START_PORT"
+        port=$(getConfig "JT_START_PORT")
+
+        colorEcho $GREEN "|----------------------------------------------------------------|"
+        colorEcho $GREEN "程序启动成功, WEB访问端口${port}, 默认账号admin, 默认密码admin123。"
+        colorEcho $GREEN "如果您是默认密码及默认端口, 请及时在网页设置中修改账号密码及web访问端口。"
+        colorEcho $GREEN "|----------------------------------------------------------------|"
     fi
 }
 
 update() {
-    if screen -list | grep -q "minerProxy"; then
-        screen -X -S minerProxy quit
+    turn_off
+
+    installapp 1.0.0
+}
+
+turn_on() {
+    
+    if [ ! -f "$PATH_TURN_ON_SH" ];then
+
+        touch $PATH_TURN_ON_SH
+
+        chmod 777 -R $PATH_JT
+        chmod 777 -R $PATH_TURN_ON
+
+        echo 'COUNT=$(ps -ef |grep '$PATH_EXEC' |grep -v "grep" |wc -l)' >> $PATH_TURN_ON_SH
+
+        echo 'if [ $COUNT -eq 0 ] && [ $(id -u) -eq 0 ]; then' >> $PATH_TURN_ON_SH
+        echo "  cd ${PATH_JT}" >> $PATH_TURN_ON_SH
+        echo "  nohup "${PATH_JT}/${PATH_EXEC}" 2>err.log &" >> $PATH_TURN_ON_SH
+        echo '  echo "JTProxy已启动"' >> $PATH_TURN_ON_SH
+        echo 'else' >> $PATH_TURN_ON_SH
+        echo '  if [ $COUNT -ne 0 ]; then' >> $PATH_TURN_ON_SH
+        echo '      echo "JTProxy已启动, 无需重复启动"' >> $PATH_TURN_ON_SH
+        echo '  elif [ $(id -u) -ne 0 ]; then' >> $PATH_TURN_ON_SH
+        echo '      echo "使用ROOT用户登录才能启动JTPROXY"' >> $PATH_TURN_ON_SH
+        echo '  fi' >> $PATH_TURN_ON_SH
+        echo 'fi' >> $PATH_TURN_ON_SH
+
+        echo "已设置开机启动"
+    else
+        echo "已设置开机启动, 无需重复设置"
     fi
-    rm -rf /root/minerProxy/minerProxy_v5-1_linux
-    echo "请选择数字1版本"
-    echo "  1、v5-1"
-    read -p "$(echo -e "请输入[1]：")" choose
+}
+
+turn_off() {
+    rm $PATH_TURN_ON_SH
+    echo "已关闭开机启动"
+}
+
+installapp() {
+    if [ -n "$1" ]; then
+        VERSION="$1"
+    fi
+    
+    colorEcho ${GREEN} "开始安装JTPROXY-V-${VERSION}"
+
+    if [[ `command -v yum` ]];then
+        colorEcho ${BLUE} "关闭防火墙"
+        systemctl stop firewalld.service 1>/dev/null
+        systemctl disable firewalld.service 1>/dev/null
+    fi
+
+    colorEcho $BLUE "请选择下载线路1或2"
+    read -p "$(echo -e "请选择[1-2]：")" choose
+    case $choose in
+    2)
+        echo "已选择备用线路"
+        DOWNLOAD_HOST=$DOWNLOAD_STANDBY
+    ;;
+    esac
+    
+
+    colorEcho $BLUE "是否更新LINUX软件源？如果您的LINUX更新过可输入2跳过并继续安装，如果您不了解用途直接输入1。"
+    read -p "$(echo -e "请选择[1-2]：")" choose
     case $choose in
     1)
-        wget https://raw.githubusercontent.com/MINErpRroxY/MinerProxy/main/minerProxy_v5-1_linux -O /root/minerProxy/minerProxy_v5-1_linux
-        ;;
-    *)
-        echo "请输入数字1"
-        ;;
+        colorEcho ${BLUE} "开始更新软件源..."
+        $PACKAGE_MANAGER update -y
+    ;;
     esac
-    chmod a+x /root/mineProxy/minerProxy_v5-1_linux
-    nohup ./minerProxy_v5-1_linux &
-
-#    echo "暂无更新，请按ctrl+C退出，请勿更新，以免文件错误"
-#    read -p "是否删除配置文件[yes/no]：" flag
-#    if [ -z $flag ]; then
-#        echo "输入错误" && exit 1
-#    else
-#        if [ "$flag" = "yes" -o "$flag" = "ye" -o "$flag" = "y" ]; then
-#            rm -rf /root/miner_proxy/config.yml
-#            echo "删除配置文件成功"
-#        fi
-#    fi
-    screen -dmS minerProxy
-    sleep 0.2s
-    screen -r minerProxy -p 0 -X stuff "cd /root/minerProxy"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-    screen -r minerProxy -p 0 -X stuff "./run.sh"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-
-    sleep 1s
-    nohup ./minerProxy_v5-1_linux &
-    sleep 3s
-    cat /root/minerProxy/config.yml
-    echo "<<<如果成功了,这是您的端口号 请打开 http://服务器ip:端口 访问web服务进行配置:v5-1版本默认端口号为18888，请记录您的token,尽快登陆并修改密码"
-    echo "您可运行 screen -r minerProxy 查看程序输出"
-}
-
-start() {
-    if screen -list | grep -q "minerProxy_v5-1_linux"; then
-        echo -e "minerProxy_v5-1_linux已启动,请勿重复启动" && exit 1
+    
+    if [[ ! `command -v curl` ]];then 
+        echo "尚未安装CURL, 开始安装"
+        $PACKAGE_MANAGER install curl
     fi
-    screen -dmS minerProxy
-    sleep 0.2s
-    screen -r minerProxy -p 0 -X stuff "cd /root/minerProxy"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-    screen -r minerProxy -p 0 -X stuff "./run.sh"
-    screen -r minerProxy -p 0 -X stuff $'\n'
 
-    echo "minerProxy_v5-1_linux已启动"
-    echo "您可以使用指令screen -r minerProxy查看程序输出"
-}
-
-restart() {
-    if screen -list | grep -q "minerProxy_v5-1_linux"; then
-        screen -X -S minerProxy quit
+    if [[ ! `command -v wget` ]];then
+        echo "尚未安装wget, 开始安装"
+        $PACKAGE_MANAGER install wget
     fi
-    screen -dmS minerProxy
-    sleep 0.2s
-    screen -r minerProxy -p 0 -X stuff "cd /root/minerProxy"
-    screen -r minerProxy -p 0 -X stuff $'\n'
-    screen -r minerProxy -p 0 -X stuff "./run.sh"
-    screen -r minerProxy -p 0 -X stuff $'\n'
 
-    echo "minerProxy_v5-1_linux 重新启动成功"
-    echo "您可运行 screen -r minerProxy 查看程序输出"
-}
-
-stop() {
-    if screen -list | grep -q "minerProxy_v5-1_linux"; then
-        screen -X -S minerProxy_v5-1_linux quit
+    if [[ ! `command -v killall` ]];then
+        echo "尚未安装killall, 开始安装"
+        $PACKAGE_MANAGER install psmisc
     fi
-    echo "minerProxy_v5-1_linux 已停止"
+
+    if [[ ! `command -v killall` ]];then
+        colorEcho ${RED} "安装killall失败！！！！请手动安装psmisc后再执行安装程序。"
+        return
+    fi
+
+    checkProcess "JTproxy"
+    if [ $? -eq 1 ]; then
+        colorEcho ${RED} "发现正在运行的JTMinerProxy, 需要停止才可继续安装。"
+        colorEcho ${YELLOW} "输入1停止正在运行的JTMinerProxy并且继续安装, 输入2取消安装。"
+
+        read -p "$(echo -e "请选择[1-2]：")" choose
+        case $choose in
+        1)
+            stop
+            ;;
+        2)
+            echo "取消安装"
+            return
+            ;;
+        *)
+            echo "输入错误, 取消安装。"
+            return
+            ;;
+        esac
+    fi
+
+    colorEcho $BLUE "创建目录"
+    
+    if [[ ! -d $PATH_JT ]];then
+        mkdir $PATH_JT
+        chmod 777 -R $PATH_JT
+    else
+        colorEcho $YELLOW "目录已存在, 无需重复创建, 继续执行安装。"
+    fi
+
+    if [[ ! -d $PATH_NOHUP ]];then
+        touch $PATH_NOHUP
+        touch $PATH_ERR
+
+        chmod 777 -R $PATH_NOHUP
+        chmod 777 -R $PATH_ERR
+    fi
+
+    if [[ ! -f $PATH_CONFIG ]];then
+        setConfig JT_START_PORT $((RANDOM%65535+1))
+    fi
+
+    colorEcho $BLUE "拉取程序"
+    # wget -P $PATH_JT "${DOWNLOAD_HOST}/${ORIGIN_EXEC}" -O "${PATH_JT}/${PATH_EXEC}" 1>/dev/null
+    wget -P $PATH_JT "${DOWNLOAD_HOST}/JTproxy_v${VERSION}_linux" -O "${PATH_JT}/${PATH_EXEC}" 1>/dev/null
+
+    filterResult $? "拉取程序 JTproxy_v${VERSION}_linux"
+
+    chmod 777 -R "${PATH_JT}/${PATH_EXEC}"
+
+    turn_on
+
+    change_limit
+
+    start
 }
 
 change_limit(){
-    num="n"
+    colorEcho $BLUE "修改系统最大连接数"
+
+    changeLimit="n"
+
     if [ $(grep -c "root soft nofile" /etc/security/limits.conf) -eq '0' ]; then
-        echo "root soft nofile 102400" >>/etc/security/limits.conf
-        num="y"
+        echo "root soft nofile 65535" >>/etc/security/limits.conf
+        echo "* soft nofile 65535" >>/etc/security/limits.conf
+        changeLimit="y"
     fi
 
-    if [[ "$num" = "y" ]]; then
-        echo "连接数限制已修改为102400,重启服务器后生效"
+    if [ $(grep -c "root hard nofile" /etc/security/limits.conf) -eq '0' ]; then
+        echo "root hard nofile 65535" >>/etc/security/limits.conf
+        echo "* hard nofile 65535" >>/etc/security/limits.conf
+        changeLimit="y"
+    fi
+
+    if [ $(grep -c "DefaultLimitNOFILE=65535" /etc/systemd/user.conf) -eq '0' ]; then
+        echo "DefaultLimitNOFILE=65535" >>/etc/systemd/user.conf
+        changeLimit="y"
+    fi
+
+    if [ $(grep -c "DefaultLimitNOFILE=65535" /etc/systemd/system.conf) -eq '0' ]; then
+        echo "DefaultLimitNOFILE=65535" >>/etc/systemd/system.conf
+        changeLimit="y"
+    fi
+
+    if [[ "$changeLimit" = "y" ]]; then
+        echo "连接数限制已修改为65535,重启服务器后生效"
     else
         echo -n "当前连接数限制："
         ulimit -n
     fi
 }
 
-check_limit(){
-    echo -n "当前连接数限制："
+check_limit() {
+    echo "当前系统连接数：" 
     ulimit -n
 }
 
-echo "======================================================="
-echo "安装minerProxy_v5-1_linux 一键工具"
-echo "  1、安装(默认安装到/root/minerProxy)"
-echo "  2、卸载"
-echo "  3、更新"
-echo "  4、启动"
-echo "  5、重启"
-echo "  6、停止"
-echo "  7、解除linux系统连接数限制(需要重启服务器生效)"
-echo "  8、查看当前系统连接数限制"
-#echo "  9、配置开机启动"
-echo "======================================================="
-read -p "$(echo -e "请选择[1-8]：")" choose
+check_hub() {
+    # cd $PATH_JT
+    colorEcho ${YELLOW} "按住CTRL+C后台运行"
+    tail -f /root/JTmproxy/nohup.out
+}
+
+check_err() {
+    colorEcho ${YELLOW} "按住CTRL+C后台运行"
+    tail -f /root/JTmproxy/err.log
+}
+
+install_target() {
+    echo "输入已发布的版本来进行安装："
+    echo ""
+    ISSUE
+    echo ""
+    read -p "$(echo -e "请输入版本号：")" choose
+
+    installapp $choose
+}
+
+restart() {
+    stop
+
+    start
+}
+
+set_port() {
+    read -p "$(echo -e "请输入要设置的端口号：")" choose
+
+    setConfig JT_START_PORT $choose
+
+    stop
+
+    start
+}
+
+resetpass() {
+    stop
+
+    rm -rf $PATH_LICENSE
+
+    start
+
+    echo "重置密码完成, 已修改为默认账号密码 admin admin123"
+}
+
+lookport() {
+    port=$(getConfig "JT_START_PORT")
+
+    colorEcho $GREEN "当前WEB访问端口${port}"
+}
+
+updates() {
+    stop
+
+    clearlog
+
+    rm -rf $PATH_LICENSE
+
+    update
+}
+
+echo "-------------------------------------------------------"
+colorEcho ${GREEN} "欢迎使用JTMinerProxy安装工具, 请输入操作号继续。"
+
+echo ""
+echo "1、安装"
+echo "2、更新"
+echo "3、还是更新"
+echo "4、启动"
+echo "5、重启"
+echo "6、停止"
+echo "7、修改启动端口"
+echo "8、解除linux系统连接数限制(需要重启服务器生效)"
+echo "9、查看当前系统连接数限制"
+echo "10、设置开机启动"
+echo "11、关闭开机启动"
+echo "12、查看程序运行状态"
+echo "13、查看程序错误日志"
+echo "14、安装指定版本（通常不需要这个选项来安装）"
+echo "15、清理日志文件"
+echo "16、查看当前WEB服务端口"
+echo "17、卸载"
+echo "18、重置密码"
+echo "19、清除缓存并更新"
+echo ""
+colorEcho ${YELLOW} "如果在此之前是手动安装的程序，请自己手动退出程序后再执行此脚本，否则容易发生冲突，所有操作尽量通过此脚本完成。"
+echo "-------------------------------------------------------"
+
+read -p "$(echo -e "请选择[1-19]：")" choose
+
 case $choose in
 1)
-    install
+    installapp 1.0.0
     ;;
 2)
-    uninstall
+    update
     ;;
 3)
     update
@@ -202,12 +462,45 @@ case $choose in
     stop
     ;;
 7)
-    change_limit
+    set_port
     ;;
 8)
+    change_limit
+    ;;
+9)
     check_limit
     ;;
+10)
+    turn_on
+    ;;
+11)
+    turn_off
+    ;;
+12)
+    check_hub
+    ;;
+13)
+    check_err
+    ;;
+14)
+    install_target
+    ;;
+15)
+    clearlog
+    ;;
+16)
+    lookport
+    ;;
+17)
+    uninstall
+    ;;
+18)
+    resetpass
+    ;;
+19)
+    updates
+    ;;
 *)
-    echo "输入错误请重新输入！"
+    echo "输入了错误的指令, 请重新输入。"
     ;;
 esac
