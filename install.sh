@@ -4,11 +4,11 @@
 
 VERSION="1.0.0"
 
-DOWNLOAD_HOST="https://github.com/MINErpRroxY/MinerProxy/tree/main/Linux-64"
+DOWNLOAD_HOST="https://github.com/MINErpRroxY/MinerProxy/raw/main/Linux-64"
 
-DOWNLOAD_STANDBY="https://github.com/MINErpRroxY/MinerProxy/tree/main/Linux-64"
+DOWNLOAD_STANDBY="https://github.com/MINErpRroxY/MinerProxy/raw/main/Linux-64"
 
-PATH_J="/root/JTproxy"
+PATH_JT="/root/JTproxy"
 
 PATH_EXEC="JTproxy"
 
