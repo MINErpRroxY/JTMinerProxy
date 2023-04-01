@@ -8,7 +8,7 @@ DOWNLOAD_HOST="https://github.com/MINErpRroxY/MinerProxy/raw/main/Linux-64"
 
 DOWNLOAD_STANDBY="https://github.com/MINErpRroxY/MinerProxy/raw/main/Linux-64"
 
-PATH_JT="/root/JTproxy"
+PATH_JT="/root/JTmproxy"
 
 PATH_EXEC="JTproxy"
 
