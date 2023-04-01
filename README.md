@@ -5,9 +5,9 @@
 
 # JTMinerProxy - 界面展示，清晰整洁。
 
-<div align="center">
-<img src="(https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/main/%E6%8A%BD%E6%B0%B4%E5%B8%81%E7%A7%8D%E9%83%A8%E5%88%86%E5%B1%95%E7%A4%BA.png)]" width="883" height="400" />
-</div>
+<p align="center">
+    <img src="./抽水币种部分展示.png" alt="Logo">
+  </p>
 
 # 矿工交流 QQ群： 308929177
 
