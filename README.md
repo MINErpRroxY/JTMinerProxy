@@ -18,15 +18,27 @@
 使用 root 用户输入下面命令安装或卸载<br />
 请尽量不要使用国内的腾讯云，阿里云等云服务器。选择国外的CNN回国路线的服务器，请先查阅服务商公司所在地是否不属于国内最好。
 
+
+<h2>免责声明</h2>
+<p>本软件仅在法律允许的范围内使用。如果您使用本软件，即表示您默认接受本许可。如果您在限制区域使用它，您将对法律问题负责.</p>
+
 ### 输入命令
+
 ```bash
+
 bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/main/install.sh)
 ```
+
+### After the installation is complete, please modify the login account, password and startup port immediately to prevent explosion.
+
+<img src="./image/t12.png" alt="Logo">
+
 ### 香港本地公司服务商推荐，低延迟，安全，无需备案。
 ```
 注册抢购价366一年:链接:https://my.htstack.com/aff.php?aff=7162
 先点击右上角快速注册，然后再点击左上角的最新活动，选择第二个云服务器
 选择香港服务器366一年超划算。如果你的矿机算力足够大，可以选择第二个款配置。
+
 
 # Liunx常用命令
 ```bash
