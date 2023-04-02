@@ -41,6 +41,8 @@ bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/mai
 四.输入你的默认账号密码进去以后，可以选择设置-账号设置，修改你的账号跟密码
 五.点击矿池管理-添加矿池代理
 
+请注意，如果使用纯转发模式，请选择币种选项最下面的那个PROXY
+
 六.详细解释
 1.端口号-意思是你的挖矿软件的所需要填写的端口号
 2.币种-你需要挖矿的币种
