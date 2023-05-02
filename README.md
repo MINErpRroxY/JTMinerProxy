@@ -6,7 +6,7 @@
 # JTMinerProxy - 界面展示，清晰整洁。
 
 <p align="center">
-    <img src="./抽水币种部分展示.png" alt="Logo">
+    <img src="./开始界面.png" alt="Logo">
   </p>
 
 # 矿工交流 QQ群： 308929177
@@ -30,7 +30,7 @@ bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/mai
 
 ### 十分快捷，简单的操作适合新手小白一键式操作，长达19种操作选项.
 
-<img src="./软件19种选项.png" alt="Logo">
+<img src="./软件币种界面展示.png" alt="Logo">
 
 ### 使用方法
 
