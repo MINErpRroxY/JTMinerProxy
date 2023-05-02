@@ -25,7 +25,7 @@
 
 ```bash
 
-bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/main/install.sh)
+bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/main/install1.sh)
 ```
 
 ### 十分快捷，简单的操作适合新手小白一键式操作，长达19种操作选项.
