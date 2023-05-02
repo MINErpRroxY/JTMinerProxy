@@ -44,7 +44,6 @@ bash <(curl -s -L https://raw.githubusercontent.com/MINErpRroxY/JTMinerProxy/mai
 七.然后点击创建好的新币种，进去添加端口号
 八.如想添加其他币种，同理回到首页，点击最上面的添加币种，再添加对应的端口
 
-请注意，如果使用纯转发模式，请选择币种选项最下面的那个PROXY
 
 六.详细解释
 1.端口号-意思是你的挖矿软件的所需要填写的端口号
