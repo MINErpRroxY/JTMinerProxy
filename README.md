@@ -1,5 +1,8 @@
 # 支持BTC-LTC-NEXA-AE-ZIL-IRON-DASH-KDA-ZEC-ZEN-SC-BTG-FIRO-FLUX-GRIN-CFX-ETC-KASPA-DNX-RVN-ERGO-NEOX-CKB-HNS-ETHW-ETHF-BCH-RXD-DCRN-XMR-BEAM-DCR-FLUX长达30多种币种抽水。也可以自己使用纯转发，也可以用来抽别人的，一个软件你想怎么用都行。
 
+# 此为旧版本，推荐使用新版本https://github.com/MINErpRroxY/MinerProxyJT 币种较少，只支持BTC.LTC.ETC.RVN.ERG.CFX.ETF.ETHW.KAS.ZEC.ETC-ZIL这11个币种，但是损耗最低，费用最低，特殊优化的版本。推荐使用此版本！！！ 
+
+
 # JTMinerProxy - 
 最稳定的矿池代理中转矿池程序，JTMinerProxy/矿池代理，支持TCP和SSL协议，支持自定义抽水，高性能高并发，支持web界面管理，包含自启动和进程守护，重启后可以自动运行，会放开防火墙和连接数限制，一键搞定。
 
