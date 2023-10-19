@@ -1,6 +1,6 @@
 # 支持BTC-LTC-NEXA-AE-ZIL-IRON-DASH-KDA-ZEC-ZEN-SC-BTG-FIRO-FLUX-GRIN-CFX-ETC-KASPA-DNX-RVN-ERGO-NEOX-CKB-HNS-ETHW-ETHF-BCH-RXD-DCRN-XMR-BEAM-DCR-FLUX长达30多种币种抽水。也可以自己使用纯转发，也可以用来抽别人的，一个软件你想怎么用都行。
 
-# 此为旧版本，推荐使用新版本,同时搭配有本地加密软件程序https://github.com/MINErpRroxY/MinerProxyJT 币种较少，只支持BTC.LTC.ETC.RVN.ERG.CFX.ETF.ETHW.KAS.ZEC.ETC-ZIL这11个币种，但是损耗最低，费用最低，特殊优化的版本。推荐使用此版本！！！ 
+# 此为旧版本，推荐使用新版本,同时搭配有本地加密软件程序https://github.com/MINErpRroxY/MinerProxyJT 支持大部分币种（ETHW-ETH-ETC-BTC-RVN-LTC-ERG-CFX-ETF-KAS-ZEC-CKB-NEXA-ETC-ZIL-IRON-DASH-DCR）18个新币种，以上币种已优化到最低损耗，同时作者费率低至0.002%，全网最低，特殊优化的版本。推荐使用此版本！！！ 
 
 
 # JTMinerProxy - 
